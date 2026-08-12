@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hinsche.re — Onchain Reinsurance Intelligence</title>
+<meta name="description" content="The independent data and research source for tokenized reinsurance and onchain insurance-linked securities. Yield tracker, deal database, weekly brief.">
+<meta property="og:title" content="Hinsche.re — Onchain Reinsurance Intelligence">
+<meta property="og:description" content="Independent tracking of tokenized reinsurance yields, deals and regulation. The weekly brief for allocators and DeFi treasuries.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://hinsche.re">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0e1a; --bg2:#0f1526; --card:#131b30; --line:#1e2a47;
+  --text:#e8ecf6; --muted:#8d99b8; --accent:#4f8cff; --accent2:#37d5a4;
+  --warn:#ffb454; --danger:#ff6b7a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased}
+.mono{font-family:'JetBrains Mono',monospace}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+.wrap{max-width:1140px;margin:0 auto;padding:0 24px}
+
+/* Nav */
+nav{position:sticky;top:0;z-index:50;background:rgba(10,14,26,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{font-weight:800;font-size:1.15rem;letter-spacing:-.02em;color:var(--text)}
+.logo span{color:var(--accent2)}
+.nav-links{display:flex;gap:28px;align-items:center}
+.nav-links a{color:var(--muted);font-size:.9rem;font-weight:500}
+.nav-links a:hover{color:var(--text);text-decoration:none}
+.btn{display:inline-block;background:var(--accent);color:#fff;padding:10px 20px;border-radius:8px;font-weight:600;font-size:.9rem;border:none;cursor:pointer;transition:all .15s}
+.btn:hover{background:#3a76e8;text-decoration:none;transform:translateY(-1px)}
+.btn-ghost{background:transparent;border:1px solid var(--line);color:var(--text)}
+.btn-ghost:hover{background:var(--card);border-color:var(--accent)}
+
+/* Hero */
+.hero{padding:96px 0 72px;background:radial-gradient(ellipse 80% 50% at 50% -10%,rgba(79,140,255,.12),transparent),radial-gradient(ellipse 60% 40% at 80% 10%,rgba(55,213,164,.06),transparent)}
+.tag{display:inline-block;font-size:.75rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent2);border:1px solid rgba(55,213,164,.3);background:rgba(55,213,164,.06);padding:5px 14px;border-radius:100px;margin-bottom:24px}
+h1{font-size:clamp(2.2rem,5vw,3.6rem);font-weight:800;letter-spacing:-.03em;line-height:1.12;max-width:820px}
+h1 em{font-style:normal;background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{font-size:1.15rem;color:var(--muted);max-width:640px;margin:24px 0 36px}
+.hero-cta{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.stats{display:flex;gap:48px;margin-top:64px;flex-wrap:wrap}
+.stat .n{font-size:1.9rem;font-weight:800;letter-spacing:-.02em}
+.stat .n.green{color:var(--accent2)}
+.stat .l{font-size:.82rem;color:var(--muted);margin-top:2px}
+
+/* Sections */
+section{padding:72px 0;border-top:1px solid var(--line)}
+.sec-tag{font-size:.75rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:12px}
+h2{font-size:1.9rem;font-weight:800;letter-spacing:-.02em;margin-bottom:14px}
+.sec-sub{color:var(--muted);max-width:640px;margin-bottom:40px}
+
+/* Tracker table */
+.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--bg2)}
+table{width:100%;border-collapse:collapse;font-size:.86rem;min-width:900px}
+thead th{text-align:left;padding:14px 16px;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--line);white-space:nowrap;background:var(--card)}
+tbody td{padding:14px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover{background:rgba(79,140,255,.04)}
+.pname{font-weight:600;white-space:nowrap}
+.pname .iss{display:block;font-size:.76rem;color:var(--muted);font-weight:400}
+.yield{font-family:'JetBrains Mono',monospace;font-weight:600;white-space:nowrap}
+.y-low{color:var(--accent2)} .y-mid{color:var(--warn)} .y-high{color:var(--danger)}
+.chip{display:inline-block;font-size:.72rem;font-weight:600;padding:3px 10px;border-radius:100px;white-space:nowrap}
+.c-live{background:rgba(55,213,164,.12);color:var(--accent2)}
+.c-open{background:rgba(255,180,84,.12);color:var(--warn)}
+.c-closed{background:rgba(141,153,184,.15);color:var(--muted)}
+.tbl-note{font-size:.78rem;color:var(--muted);margin-top:14px}
+
+/* Cards */
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:28px}
+.card h3{font-size:1.05rem;font-weight:700;margin-bottom:10px}
+.card p{font-size:.9rem;color:var(--muted)}
+.card .ico{font-size:1.5rem;margin-bottom:14px;display:block}
+
+/* Newsletter */
+.nl{background:linear-gradient(135deg,rgba(79,140,255,.1),rgba(55,213,164,.07));border:1px solid var(--line);border-radius:18px;padding:56px 40px;text-align:center}
+.nl h2{margin-bottom:10px}
+.nl p{color:var(--muted);max-width:520px;margin:0 auto 28px}
+.nl-form{display:flex;gap:10px;max-width:460px;margin:0 auto;flex-wrap:wrap;justify-content:center}
+.nl-form input{flex:1;min-width:240px;padding:12px 16px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--text);font-size:.95rem;font-family:inherit}
+.nl-form input:focus{outline:none;border-color:var(--accent)}
+.nl-note{font-size:.76rem;color:var(--muted);margin-top:14px}
+
+/* About */
+.about-flex{display:flex;gap:48px;align-items:flex-start;flex-wrap:wrap}
+.about-text{flex:1;min-width:300px}
+.about-text p{color:var(--muted);margin-bottom:16px}
+.about-text strong{color:var(--text)}
+
+/* Footer */
+footer{border-top:1px solid var(--line);padding:40px 0;font-size:.82rem;color:var(--muted)}
+.foot-flex{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap}
+.disclaimer{font-size:.75rem;color:#5f6b8a;max-width:820px;margin-top:20px;line-height:1.5}
+@media(max-width:640px){.stats{gap:28px}.nl{padding:40px 20px}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap nav-inner">
+    <div class="logo">hinsche<span>.re</span></div>
+    <div class="nav-links">
+      <a href="#tracker">Yield Tracker</a>
+      <a href="#coverage">Coverage</a>
+      <a href="#about">About</a>
+      <a href="#subscribe" class="btn">Get the Brief</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="tag">Independent · Data-driven · No shilling</span>
+    <h1>The intelligence layer for <em>tokenized reinsurance</em> &amp; onchain ILS</h1>
+    <p class="sub">Reinsurance is moving onchain — $460M+ TVL protocols, tokenized cat exposure on Solana, institutional pilots by Schroders and Hannover Re. We track every product, yield and regulatory move. Independently.</p>
+    <div class="hero-cta">
+      <a href="#subscribe" class="btn">Subscribe to the weekly brief</a>
+      <a href="#tracker" class="btn btn-ghost">View the Yield Tracker ↓</a>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="n">15+</div><div class="l">Products &amp; platforms tracked</div></div>
+      <div class="stat"><div class="n green">6–43%</div><div class="l">Realized yield range p.a.</div></div>
+      <div class="stat"><div class="n">$700M+</div><div class="l">Tracked onchain ILS TVL</div></div>
+      <div class="stat"><div class="n">Weekly</div><div class="l">Data updates, every Thursday</div></div>
+    </div>
+  </div>
+</header>
+
+<section id="tracker">
+  <div class="wrap">
+    <div class="sec-tag">Live Data</div>
+    <h2>Onchain ILS Yield Tracker</h2>
+    <p class="sec-sub">Every live tokenized reinsurance and insurance-linked product — target vs. realized yield, structure, chain and access. The only aggregated view of this market anywhere.</p>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr><th>Product</th><th>Structure</th><th>Chain</th><th>Target Yield</th><th>Current / Realized</th><th>TVL / Size</th><th>Min. Ticket</th><th>Access</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="pname">reUSD<span class="iss">Re Protocol</span></td><td>Permissioned vault — T-bills + delta-neutral ETH basis</td><td>Avalanche</td><td class="yield y-low">6–12%</td><td class="yield y-low">~6.1%</td><td>$466M (protocol)</td><td>KYC</td><td>Permissioned</td><td><span class="chip c-live">Live</span></td></tr>
+          <tr><td class="pname">reUSDe<span class="iss">Re Protocol</span></td><td>Insurance-alpha vault — direct underwriting exposure</td><td>Avalanche</td><td class="yield y-mid">15–23%</td><td class="yield y-mid">~12.0%</td><td>incl. above</td><td>KYC</td><td>Permissioned</td><td><span class="chip c-live">Live</span></td></tr>
+          <tr><td class="pname">ONyc<span class="iss">OnRe</span></td><td>Yield token on reinsurance premiums + collateral yield, BMA-regulated</td><td>Solana</td><td class="yield y-low">10–16%</td><td class="yield y-mid">20%+ looped</td><td>$255M</td><td>None</td><td>Open DeFi</td><td><span class="chip c-live">Live</span></td></tr>
+          <tr><td class="pname">EtaCat Re 25/26<span class="iss">SurancePlus / Oxbridge Re</span></td><td>Tokenized reinsurance sidecar, $10/token</td><td>Avalanche</td><td class="yield y-mid">20%</td><td class="yield y-mid">29.3% realized</td><td>&gt;$16M cum. (all series)</td><td>$5,000</td><td>Reg D / Reg S</td><td><span class="chip c-closed">Closed</span></td></tr>
+          <tr><td class="pname">ZetaCat Re 25/26<span class="iss">SurancePlus / Oxbridge Re</span></td><td>High-yield tokenized sidecar, $10/token</td><td>Avalanche</td><td class="yield y-high">42%</td><td class="yield y-high">43.4% realized</td><td>see above</td><td>$5,000</td><td>Reg D / Reg S</td><td><span class="chip c-closed">Closed</span></td></tr>
+          <tr><td class="pname">HCI Re 2026 A<span class="iss">SurancePlus × HCI / Fortex Re</span></td><td>Synthetic excess-of-loss exposure — highest risk tranche</td><td>Solana</td><td class="yield y-high">~243%*</td><td class="yield">—</td><td>~$12M offering (A–C)</td><td>~$5,000</td><td>506(c) / Reg S</td><td><span class="chip c-open">Offering</span></td></tr>
+          <tr><td class="pname">HCI Re 2026 B<span class="iss">SurancePlus × HCI / Fortex Re</span></td><td>Mid tranche</td><td>Solana</td><td class="yield y-high">~133%*</td><td class="yield">—</td><td>see above</td><td>~$5,000</td><td>506(c) / Reg S</td><td><span class="chip c-open">Offering</span></td></tr>
+          <tr><td class="pname">HCI Re 2026 C<span class="iss">SurancePlus × HCI / Fortex Re</span></td><td>Most conservative tranche</td><td>Solana</td><td class="yield y-mid">~19%*</td><td class="yield">—</td><td>see above</td><td>~$5,000</td><td>506(c) / Reg S</td><td><span class="chip c-open">Offering</span></td></tr>
+          <tr><td class="pname">Florida ILW<span class="iss">Nayms</span></td><td>Industry Loss Warranty, Bermuda SAC structure</td><td>Base</td><td class="yield y-mid">Mid-high teens</td><td class="yield">n/a</td><td>n/a</td><td>Institutional</td><td>Institutional</td><td><span class="chip c-live">Recurring</span></td></tr>
+          <tr><td class="pname">MCM Fund I<span class="iss">MembersCap</span></td><td>Tokenized ILS fund, fiat + crypto subscription</td><td>Archax (multi-chain)</td><td class="yield">n/a</td><td class="yield">n/a</td><td>n/a</td><td>Qualified</td><td>Qualified investors</td><td><span class="chip c-live">Live</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="tbl-note">* Target returns assuming zero underwriting losses — capital is fully at risk in a catastrophe scenario. Data as of August 2026, compiled from issuer disclosures, DefiLlama, RWA.xyz and press releases. Yields are issuer-reported, not independently audited. This is not investment advice. <a href="#subscribe">Full tracker incl. structure deep-dives → subscribe</a></p>
+  </div>
+</section>
+
+<section id="coverage">
+  <div class="wrap">
+    <div class="sec-tag">What we cover</div>
+    <h2>Three things, done properly</h2>
+    <p class="sec-sub">The market has protocols marketing themselves and generalist media that misses the substance. We sit in between — with data.</p>
+    <div class="grid3">
+      <div class="card"><span class="ico">📊</span><h3>Yield &amp; TVL Tracking</h3><p>Weekly-updated comparison of every live tokenized ILS product: target vs. realized returns, TVL, structure, minimum tickets and access routes — the table that exists nowhere else.</p></div>
+      <div class="card"><span class="ico">🔍</span><h3>Deal &amp; Structure Analysis</h3><p>What's actually inside a 42% tokenized sidecar? Trigger types, collateral, legal wrappers, loss scenarios. We read the offering docs so allocators don't allocate blind.</p></div>
+      <div class="card"><span class="ico">⚖️</span><h3>Regulatory Radar</h3><p>Bermuda's BMA framework, SEC exemptions, MiCA implications — tracked and translated into what it means for issuers and investors.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="subscribe">
+  <div class="wrap">
+    <div class="nl">
+      <h2>The Hinsche.re Brief</h2>
+      <p>One email, every Thursday: market moves, updated yields, one deep dive. Read by allocators, DeFi treasuries and reinsurance professionals.</p>
+      <!-- BEEHIIV: Nach Anlage deiner Beehiiv-Publikation dieses Formular durch das Beehiiv-Embed ersetzen -->
+      <form class="nl-form" action="https://YOUR-PUBLICATION.beehiiv.com/subscribe" method="get" target="_blank">
+        <input type="email" name="email" placeholder="you@fund.com" required>
+        <button class="btn" type="submit">Subscribe — free</button>
+      </form>
+      <p class="nl-note">No spam. No shilling. Unsubscribe anytime.</p>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap">
+    <div class="sec-tag">About</div>
+    <h2>Why Hinsche.re exists</h2>
+    <div class="about-flex">
+      <div class="about-text">
+        <p>Tokenization is opening a $121B asset class that used to require a $1M+ minimum and a Bermuda rolodex. Capital is flowing in — but independent information hasn't caught up. Classic ILS media doesn't speak DeFi; crypto media doesn't understand reinsurance.</p>
+        <p><strong>Hinsche.re covers the overlap.</strong> Built by <strong>Simon Hinsche</strong> — finance background, independent, and not paid by any protocol to say nice things. Sponsorships are always clearly labeled; data and editorial are never for sale.</p>
+        <p>Questions, data corrections, or a product we should track? <a href="mailto:brief@hinsche.re">brief@hinsche.re</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-flex">
+      <div>© 2026 Hinsche.re · Onchain Reinsurance Intelligence</div>
+      <div><a href="mailto:brief@hinsche.re">Contact</a> · <a href="#" >Imprint</a> · <a href="#">Privacy</a></div>
+    </div>
+    <p class="disclaimer">Disclaimer: Hinsche.re is an independent research and data publication. Nothing on this site constitutes investment advice, an offer, or a solicitation to buy or sell any security or digital asset. Tokenized reinsurance products can lose up to 100% of invested capital in catastrophe scenarios. Yields shown are issuer-reported targets or historical results and are not indicative of future performance. Some products referenced are restricted to accredited or qualified investors in certain jurisdictions. Always read the offering documents and consult a licensed advisor.</p>
+  </div>
+</footer>
+
+</body>
+</html>
